@@ -1,0 +1,35 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      # `mvn package` runs the full test suite (unit tests, MockMvc web-layer tests, and the
+      # Testcontainers/embedded-Artemis integration tests - Docker is preinstalled and running
+      # on GitHub-hosted Ubuntu runners) before producing the jar.
+      - name: Build and test
+        run: mvn -B package
+
+      - name: Upload jar artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-master-jar
+          path: target/*.jar
+          if-no-files-found: error
