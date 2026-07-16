@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: securities_master
+      POSTGRES_USER: securities_master
+      POSTGRES_PASSWORD: securities_master
+    ports:
+      # Host port 5433, not 5432: avoids colliding with any Postgres already running locally on
+      # the default port. The container's own internal port is still 5432.
+      - "5433:5432"
+    volumes:
+      - securities_master_pgdata:/var/lib/postgresql/data
+
+volumes:
+  securities_master_pgdata:

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.guaneri.securitymaster.service.SecurityMasterServiceTest
+-------------------------------------------------------------------------------
+Tests run: 35, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.062 s -- in com.guaneri.securitymaster.service.SecurityMasterServiceTest

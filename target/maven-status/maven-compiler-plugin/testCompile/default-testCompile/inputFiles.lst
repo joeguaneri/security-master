@@ -1,0 +1,12 @@
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/jms/SecurityFeedListenerIT.java
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/repository/JdbcAppUserRepositoryTest.java
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/repository/JdbcSecurityRepositoryTest.java
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/security/JwtAuthenticationFilterTest.java
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/security/JwtServiceTest.java
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/security/SecurityConfigIT.java
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/security/SecurityConfigProbeController.java
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/service/SecurityFixtures.java
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/service/SecurityMasterServiceTest.java
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/web/AdminFeedControllerTest.java
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/web/AuthControllerTest.java
+/Users/joeguaneri/GitHub/security-master/src/test/java/com/guaneri/securitymaster/web/SecurityControllerTest.java

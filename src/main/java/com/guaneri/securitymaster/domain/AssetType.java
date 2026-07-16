@@ -1,0 +1,19 @@
+package com.guaneri.securitymaster.domain;
+
+public enum AssetType {
+  EQUITY,
+  BOND,
+  FUND,
+  COMMODITY,
+  EQUITYOPTION,
+  INDEXOPTION,
+  FUTUREOPTION,
+  FUTURE,
+  INTERESTRATESWAP,
+  CURRENCYSWAP,
+  CREDITDEFAULTSWAP,
+  TOTALRETURNSWAP,
+  FXSPOT,
+  FXFORWARD,
+  OTHER
+}

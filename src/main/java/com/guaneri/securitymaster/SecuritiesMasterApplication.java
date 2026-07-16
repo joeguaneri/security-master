@@ -1,0 +1,12 @@
+package com.guaneri.securitymaster;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SecuritiesMasterApplication {
+
+  public static void main(String[] args) {
+    SpringApplication.run(SecuritiesMasterApplication.class, args);
+  }
+}
