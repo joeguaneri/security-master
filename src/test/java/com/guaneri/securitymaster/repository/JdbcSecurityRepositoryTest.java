@@ -94,6 +94,18 @@ class JdbcSecurityRepositoryTest {
                 .expirationDate(LocalDate.parse("2025-01-17"))
                 .build()),
         Arguments.of(
+            "equitySwap",
+            Security.builder()
+                .name("Example Corp Equity Swap")
+                .currency("USD")
+                .status(SecurityStatus.ACTIVE)
+                .assetType(AssetType.EQUITYSWAP)
+                .paceSecId("PACE-EQSWAP-1")
+                .ticker("EXMPSWAP")
+                .underlyingIdentifier("EXMP")
+                .notionalCurrency("USD")
+                .build()),
+        Arguments.of(
             "currencySwap",
             Security.builder()
                 .name("USD/EUR Currency Swap")

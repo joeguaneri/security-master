@@ -35,3 +35,9 @@ A `Security` row is cross-referenced by up to five identifiers: the generated in
 `paceSecId`, `sedol`, `cusip`, and `ticker`. Any of the four external identifiers may be `null`, but
 when populated must be unique (enforced by partial unique indexes, not application code). See
 `IdentifierType` and the two lookup endpoints in `ARCHITECTURE.md`.
+
+## Security type (Eagle PACE)
+
+Classification is one flat `AssetType` on the security row. `EQUITYSWAP` is a single type code: the
+equity underlier is `underlyingIdentifier` on that same row, and `notionalCurrency` is required with
+it.

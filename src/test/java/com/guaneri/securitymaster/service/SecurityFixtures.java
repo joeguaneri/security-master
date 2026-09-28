@@ -43,6 +43,23 @@ final class SecurityFixtures {
     return base(swapType).notionalCurrency("USD").build();
   }
 
+  static Security equitySwapMissingUnderlying() {
+    return base(AssetType.EQUITYSWAP).notionalCurrency("USD").build();
+  }
+
+  static Security equitySwapMissingNotional() {
+    return base(AssetType.EQUITYSWAP).underlyingIdentifier("TEST").build();
+  }
+
+  static Security validEquitySwap() {
+    return base(AssetType.EQUITYSWAP)
+        .name("Example Corp Equity Swap")
+        .underlyingIdentifier("TEST")
+        .notionalCurrency("USD")
+        .ticker("EQSWAP")
+        .build();
+  }
+
   static Security fxMissingCurrencies(AssetType fxType) {
     return base(fxType).build();
   }
