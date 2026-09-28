@@ -110,6 +110,9 @@ public class SecurityMasterService {
     if (type.name().endsWith("OPTION") && security.strikePrice() == null) {
       throw new InvalidSecurityFieldsException(type + " requires strikePrice");
     }
+    if (type == AssetType.EQUITYSWAP && security.underlyingIdentifier() == null) {
+      throw new InvalidSecurityFieldsException("EQUITYSWAP requires underlyingIdentifier");
+    }
     if (type == AssetType.BOND && (security.couponRate() == null || security.maturityDate() == null)) {
       throw new InvalidSecurityFieldsException("BOND requires couponRate and maturityDate");
     }

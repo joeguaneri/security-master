@@ -2,10 +2,11 @@
 
 ## Purpose
 
-`security-master` is the system of record for security reference data. Each security is
-cross-referenced by up to five identifiers — a generated internal id, PACESEC ID (proprietary
-scheme), SEDOL, CUSIP, and TICKER — and carries fields for a range of asset types spanning cash
-instruments (equity, bond, fund, commodity) and derivatives (options, futures, swaps, FX).
+`security-master` is the system of record for security reference data, modeled on BNY Eagle PACE.
+Each security is one PACE record: a generated internal id plus **PACESECID** (the Eagle book-of-record
+identifier), SEDOL, CUSIP, and TICKER. Classification is a single flat security type on that row.
+Cash instruments (equity, bond, fund, commodity) and derivatives (options, futures, swaps, FX) are
+separate type codes, not a parent/child tree.
 
 ## Domain model
 
@@ -21,15 +22,22 @@ persistence model directly: one wide table, no ORM inheritance mapping to lean o
 ```
 EQUITY, BOND, FUND, COMMODITY,
 EQUITYOPTION, INDEXOPTION, FUTUREOPTION, FUTURE,
-INTERESTRATESWAP, CURRENCYSWAP, CREDITDEFAULTSWAP, TOTALRETURNSWAP,
+EQUITYSWAP, INTERESTRATESWAP, CURRENCYSWAP, CREDITDEFAULTSWAP, TOTALRETURNSWAP,
 FXSPOT, FXFORWARD,
 OTHER
 ```
 
+`EQUITYSWAP` is one PACE security type. The equity it references is `underlyingIdentifier` on the
+swap row (a ticker or other identifier string), and `notionalCurrency` is required on that same row.
+Creating or feeding an `EQUITYSWAP` without either field is rejected. The underlier, when mastered
+at all, is its own `EQUITY` security with its own PACESECID — it is not a classification level on
+the swap.
+
 `SecurityMasterService` enforces which instrument-specific fields are required for which
-`AssetType` (e.g. an `EQUITYOPTION` must carry a `strikePrice`) and throws
-`InvalidSecurityFieldsException` on violation — this is a runtime, service-layer check, not a
-compile-time type distinction, since the persistence layer doesn't support one without an ORM.
+`AssetType` (e.g. an `EQUITYOPTION` must carry a `strikePrice`, an `EQUITYSWAP` must carry
+`underlyingIdentifier` and `notionalCurrency`) and throws `InvalidSecurityFieldsException` on
+violation — this is a runtime, service-layer check, not a compile-time type distinction, since the
+persistence layer doesn't support one without an ORM.
 
 `IdentifierType` (`INTERNAL_ID, PACESEC_ID, SEDOL, CUSIP, TICKER`) is used by the generic lookup
 endpoint and the JMS feed-upsert matcher. It's mapped to a physical column name via a fixed

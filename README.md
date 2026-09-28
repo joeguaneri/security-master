@@ -1,9 +1,11 @@
 # security-master
 
-A JWT-secured Spring Boot securities mastering service. Securities are cross-referenced by internal
-id, PACESEC ID, SEDOL, CUSIP, and TICKER, and cover both cash instruments and derivatives (options,
-futures, swaps, FX). Persistence is hand-written JDBC (no Hibernate/JPA); reference-data updates
-flow in and out over JMS (embedded ActiveMQ Artemis) alongside a REST API.
+A JWT-secured Spring Boot securities master in the style of BNY Eagle PACE. Each instrument is one
+row, keyed by **PACESECID**, with a single flat security type. Securities are also cross-referenced
+by SEDOL, CUSIP, and TICKER. An equity swap is the type `EQUITYSWAP`: the equity underlier
+(`underlyingIdentifier`) and the swap notional currency sit on that same row. Persistence is
+hand-written JDBC (no Hibernate/JPA). Reference-data updates flow in and out over JMS (embedded
+ActiveMQ Artemis) alongside a REST API.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the design and [AGENTS.md](AGENTS.md) for repo
 conventions (TDD is mandatory, no ORM).
@@ -38,10 +40,14 @@ TOKEN=$(curl -s -X POST localhost:8080/api/auth/login \
   -H 'Content-Type: application/json' \
   -d '{"username":"admin","password":"admin"}' | jq -r .accessToken)
 
-# 2. Create a security
+# 2. Create the underlier, then the equity swap as one flat PACE type
 curl -X POST localhost:8080/api/securities \
   -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
-  -d '{"assetType":"EQUITY","name":"Example Corp","ticker":"EXMP","currency":"USD"}'
+  -d '{"assetType":"EQUITY","name":"Example Corp","ticker":"EXMP","paceSecId":"PACE-EXMP","currency":"USD"}'
+
+curl -X POST localhost:8080/api/securities \
+  -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+  -d '{"assetType":"EQUITYSWAP","name":"Example Corp Equity Swap","ticker":"EXMPSWAP","paceSecId":"PACE-EQSWAP-1","currency":"USD","notionalCurrency":"USD","underlyingIdentifier":"EXMP"}'
 
 # 3. Look it up by any identifier, without knowing which scheme it is
 curl -H "Authorization: Bearer $TOKEN" \

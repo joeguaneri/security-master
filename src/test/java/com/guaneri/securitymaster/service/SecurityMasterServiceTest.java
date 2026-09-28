@@ -132,6 +132,57 @@ class SecurityMasterServiceTest {
     assertThat(service.create(draft)).isEqualTo(persisted);
   }
 
+  @Test
+  void createRejectsEquitySwapMissingUnderlying() {
+    Security draft = SecurityFixtures.equitySwapMissingUnderlying();
+
+    assertThatThrownBy(() -> service.create(draft))
+        .isInstanceOf(InvalidSecurityFieldsException.class)
+        .hasMessage("EQUITYSWAP requires underlyingIdentifier");
+
+    verifyNoInteractions(repository);
+    verifyNoInteractions(eventPublisher);
+  }
+
+  @Test
+  void createRejectsEquitySwapMissingNotionalCurrency() {
+    Security draft = SecurityFixtures.equitySwapMissingNotional();
+
+    assertThatThrownBy(() -> service.create(draft))
+        .isInstanceOf(InvalidSecurityFieldsException.class)
+        .hasMessage("EQUITYSWAP requires notionalCurrency");
+
+    verifyNoInteractions(repository);
+    verifyNoInteractions(eventPublisher);
+  }
+
+  @Test
+  void createAcceptsEquitySwapAsSingleFlatType() {
+    Security draft = SecurityFixtures.validEquitySwap();
+    Security persisted = draft.toBuilder().id(UUID.randomUUID()).paceSecId("PACE-EQSWAP-1").build();
+    when(repository.insert(draft)).thenReturn(persisted);
+
+    Security result = service.create(draft);
+
+    assertThat(result.assetType()).isEqualTo(AssetType.EQUITYSWAP);
+    assertThat(result.underlyingIdentifier()).isEqualTo("TEST");
+    assertThat(result.notionalCurrency()).isEqualTo("USD");
+    assertThat(result.paceSecId()).isEqualTo("PACE-EQSWAP-1");
+    verify(eventPublisher).publish(persisted, SecurityChangeType.CREATED);
+  }
+
+  @Test
+  void upsertFromFeedRejectsEquitySwapMissingUnderlying() {
+    Security incoming = SecurityFixtures.equitySwapMissingUnderlying();
+
+    assertThatThrownBy(() -> service.upsertFromFeed(incoming))
+        .isInstanceOf(InvalidSecurityFieldsException.class)
+        .hasMessage("EQUITYSWAP requires underlyingIdentifier");
+
+    verifyNoInteractions(repository);
+    verifyNoInteractions(eventPublisher);
+  }
+
   static Stream<AssetType> fxTypes() {
     return Stream.of(AssetType.FXSPOT, AssetType.FXFORWARD);
   }
